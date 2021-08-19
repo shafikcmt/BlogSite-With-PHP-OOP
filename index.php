@@ -20,9 +20,6 @@
 			if($post)
 			{
 				while($result = $post->fetch_assoc()){
-
-				
-			
 			?>
 			<div class="samepost clear">
 				<h2><a href="post.php?id=<?php echo $result['id'] ?>"><?php echo $result['title'] ?></a></h2>
