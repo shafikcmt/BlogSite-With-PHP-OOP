@@ -2,11 +2,18 @@
 			<div class="samesidebar clear">
 				<h2>Categories</h2>
 					<ul>
-						<li><a href="#">Category One</a></li>
-						<li><a href="#">Category Two</a></li>
-						<li><a href="#">Category Three</a></li>
-						<li><a href="#">Category Four</a></li>
-						<li><a href="#">Category Five</a></li>						
+					<h2>Related articles</h2>
+			<?php
+				$query = "select * from tbl_category";
+				$category = $db->select($query);
+				if($category)
+				{
+				while($result = $category->fetch_assoc()){
+			?>
+						<li><a href="posts.php?category=<?php echo $result['id']?>"><?php echo $result['name']?></a></li>
+						<?php }}else{ ?>	
+						<li>No Category Created!</li>
+						<?php } ?>					
 					</ul>
 			</div>
 			
