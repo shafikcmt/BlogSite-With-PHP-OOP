@@ -4,8 +4,45 @@
 		
             <div class="box round first grid">
                 <h2>Add New Post</h2>
+            <?php 
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                $title = mysqli_real_escape_string($db->link,$_POST['title']);
+                $cat = mysqli_real_escape_string($db->link,$_POST['cat']);
+                $body = mysqli_real_escape_string($db->link,$_POST['body']);
+                $tags = mysqli_real_escape_string($db->link,$_POST['tags']);
+                $author = mysqli_real_escape_string($db->link,$_POST['author']);
+                $permited = array('jpg','jpeg','png','gif');
+                $file_name = $_FILES['image']['name'];
+                $file_size = $_FILES['image']['size'];
+                $file_temp = $_FILES['image']['tmp_name'];
+                $div = explode('.',$file_name);
+                $file_ext = strtolower(end($div));
+                $unique_image = substr(md5(time()),0,10).'.'.$file_ext;
+                $uploaded_image = "uploads/".$unique_image;
+                if ($title == "" ||$cat == "" ||$body == "" ||$tags == "" ||$author == "" ||$file_name == "") {
+                    echo "<span class='error'>Field Must Not not be empty !</span>";
+                }
+                elseif($file_size>1048567){
+                    echo "<div class='success'>Image size should be less than 1kb.</div>";
+                }
+                elseif(in_array($file_ext,$permited) === false){
+                     echo "<div class='success'>You can upload only:-".implode(', ',$permited)."</div>";
+                }
+                else{
+                 move_uploaded_file($file_temp,$uploaded_image);
+                 $query = "INSERT INTO tbl_post(cat,title,body,image,author,tags )VALUES('$cat','$title','$body','$uploaded_image','$author','$tags')";
+                 $insert_rows = $db->insert($query);
+                 if($insert_rows){
+                    echo "<div class='success'>Data Inserted Successfully</div>";
+                }
+                else{
+                    echo "<div class='error'>Data not Inserted !</div>";
+                }
+            }
+            }
+            ?>
                 <div class="block">               
-                 <form action="" method="" enctype="multipart/form-data">
+                 <form action="addpost.php" method="POST" enctype="multipart/form-data">
                     <table class="form">
                        
                         <tr>
@@ -13,7 +50,7 @@
                                 <label>Title</label>
                             </td>
                             <td>
-                                <input type="text" placeholder="Enter Post Title..." class="medium" />
+                                <input type="text" name="title" placeholder="Enter Post Title..." class="medium" />
                             </td>
                         </tr>
                      
@@ -22,11 +59,16 @@
                                 <label>Category</label>
                             </td>
                             <td>
-                                <select id="select" name="select">
+                                <select id="select" name="cat">
                                     <option>Select Category</option>
-                                    <option value="1">Category One</option>
-                                    <option value="2">Category Two</option>
-                                    <option value="3">Cateogry Three</option>
+                                    <?php 
+                                    $query = "select * from tbl_category";
+                                    $category = $db->select($query);
+                                    if ($category) {
+                                       while ($result = $category->fetch_assoc()) {
+                                    ?>
+                                    <option value="<?php echo $result['id']; ?>"><?php echo $result['name']; ?></option>
+                                  <?php }} ?>
                                 </select>
                             </td>
                         </tr>
@@ -38,7 +80,7 @@
                                 <label>Upload Image</label>
                             </td>
                             <td>
-                                <input type="file" />
+                                <input type="file" name="image" />
                             </td>
                         </tr>
                         <tr>
@@ -46,7 +88,23 @@
                                 <label>Content</label>
                             </td>
                             <td>
-                                <textarea class="tinymce"></textarea>
+                                <textarea name="body" class="tinymce"></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Tags</label>
+                            </td>
+                            <td>
+                                <input type="text" name="tags" placeholder="Enter Tags.." class="medium" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Author</label>
+                            </td>
+                            <td>
+                                <input type="text" name="author" placeholder="Enter Author name.." class="medium" />
                             </td>
                         </tr>
 						<tr>
