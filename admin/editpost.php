@@ -28,26 +28,56 @@ if (!isset($_GET['editpostid']) || $_GET['editpostid'] == NULL) {
                 $file_ext = strtolower(end($div));
                 $unique_image = substr(md5(time()),0,10).'.'.$file_ext;
                 $uploaded_image = "uploads/".$unique_image;
-                if ($title == "" ||$cat == "" ||$body == "" ||$tags == "" ||$author == "" ||$file_name == "") {
+                if ($title == "" ||$cat == "" ||$body == "" ||$tags == "" ||$author == "" ) {
                     echo "<span class='error'>Field Must Not not be empty !</span>";
+                }else {
+                if (!empty($file_name)) {
+                   
+                    if($file_size>1048567){
+                        echo "<div class='success'>Image size should be less than 1kb.</div>";
+                    }
+                    elseif(in_array($file_ext,$permited) === false){
+                        echo "<div class='success'>You can upload only:-".implode(', ',$permited)."</div>";
+                    }
+                    else{
+                    move_uploaded_file($file_temp,$uploaded_image);
+                    $query="UPDATE tbl_post
+                    SET
+                    cat     = '$cat',
+                    title   = '$title',
+                    body    = '$body',
+                    image   = '$uploaded_image',
+                    author  = '$author',
+                    tags    = '$tags'
+                    WHERE id = '$postid'";
+                    $updated_row = $db->update($query);
+                    if($updated_row){
+                        echo "<div class='success'>Data Updated Successfully</div>";
+                    }
+                    else{
+                        echo "<div class='error'>Data not Updated !</div>";
+                    }
                 }
-                elseif($file_size>1048567){
-                    echo "<div class='success'>Image size should be less than 1kb.</div>";
-                }
-                elseif(in_array($file_ext,$permited) === false){
-                     echo "<div class='success'>You can upload only:-".implode(', ',$permited)."</div>";
-                }
-                else{
-                 move_uploaded_file($file_temp,$uploaded_image);
-                 $query = "INSERT INTO tbl_post(cat,title,body,image,author,tags )VALUES('$cat','$title','$body','$uploaded_image','$author','$tags')";
-                 $insert_rows = $db->insert($query);
-                 if($insert_rows){
-                    echo "<div class='success'>Data Inserted Successfully</div>";
-                }
-                else{
-                    echo "<div class='error'>Data not Inserted !</div>";
-                }
+            
+
+        }else {
+            $query="UPDATE tbl_post
+                    SET
+                    cat     = '$cat',
+                    title   = '$title',
+                    body    = '$body',
+                    author  = '$author',
+                    tags    = '$tags'
+                    WHERE id = '$postid'";
+                    $updated_row = $db->update($query);
+                    if($updated_row){
+                        echo "<div class='success'>Data Updated Successfully</div>";
+                    }
+                    else{
+                        echo "<div class='error'>Data not Updated !</div>";
+                    }
             }
+        }
             }
             ?>
                 <div class="block">   
@@ -57,7 +87,7 @@ if (!isset($_GET['editpostid']) || $_GET['editpostid'] == NULL) {
                     if ($getpost) {
                         while ($postresult = $getpost->fetch_assoc()) {
                     ?>            
-                 <form action="addpost.php" method="POST" enctype="multipart/form-data">
+                 <form action="" method="POST" enctype="multipart/form-data">
                     <table class="form">
                        
                         <tr>
