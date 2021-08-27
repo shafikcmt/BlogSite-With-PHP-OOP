@@ -9,7 +9,14 @@
 			<li><a href="#">Privacy</a></li>
 		</ul>
 	  </div>
-	  <p>&copy; Copyright Training with live project.</p>
+<?php
+    $query = "select * from tbl_footer where id = '1'";
+    $copyright = $db->select($query);
+    if ($copyright) {
+        while ($result = $copyright->fetch_assoc()) {
+?> 
+	  <p>&copy; <?php echo $result['note']; ?> <?php echo date('Y'); ?></p>
+<?php }} ?>
 	</div>
 	<div class="fixedicon clear">
 <?php
