@@ -24,6 +24,7 @@ class Format
    {
        $path = $_SERVER['SCRIPT_FILENAME'];
        $title = basename($path,'.php');
+       $title = str_ireplace('_',' ',$title);//contact_us for use
        if($title == 'index')
        {
            $title = 'home';
@@ -31,6 +32,7 @@ class Format
         $title = 'contact';
        }
        return $title = ucwords($title);
+    //    return $title = ucfirst($title);
    }
 }
 
