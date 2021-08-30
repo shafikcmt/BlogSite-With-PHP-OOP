@@ -72,9 +72,6 @@
                                 </select>
                             </td>
                         </tr>
-                   
-                    
-                      
                         <tr>
                             <td>
                                 <label>Upload Image</label>
