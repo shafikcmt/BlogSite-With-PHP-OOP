@@ -59,7 +59,8 @@ $(window).load(function() {
 		</a>
 		<div class="social clear">
 			<div class="icon clear">
-			<?php
+				
+<?php
     $query = "select * from tbl_social where id = '1'";
     $socialmedia = $db->select($query);
     if ($socialmedia) {
