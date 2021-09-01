@@ -3,6 +3,23 @@
         <div class="grid_10">
             <div class="box round first grid">
                 <h2>Inbox</h2>
+<?php 
+if (isset($_GET['seenid'])) {
+	$seenid = $_GET['seenid'];
+	
+		$query = "UPDATE tbl_contact
+		SET
+		status = '1'
+		WHERE id = '$seenid'";
+		$updatedrow = $db->update($query);
+		if ($updatedrow) {
+			echo "<span class='success'>Message sent in the Seen Box.</span>";
+			}else {
+				echo "<span class='error'>Something Wrong!</span>";
+
+		}
+	}
+?>
                 <div class="block">        
                     <table class="data display datatable" id="example">
 					<thead>
@@ -34,7 +51,7 @@
 							<td>
 								<a href="viewmsg.php?viewmsgid=<?php echo $result['id'] ?>">View</a> || 
 								<a href="replymsg.php?replymsgid=<?php echo $result['id'] ?>">Reply</a> || 
-								<a href="seenid=<?php echo $result['id'] ?>">Seen</a> || 
+								<a onclick="return confirm('Are You sure to Move This Message !!')" href="?seenid=<?php echo $result['id'] ?>">Seen</a> || 
 							</td>
 						</tr>
 						<?php }}?>
@@ -48,7 +65,7 @@
 			<div class="box round first grid">
                 <h2>Seen Message</h2>
                 <div class="block">        
-                    <table class="data display datatable" id="example">
+				<table class="data display datatable" id="example">
 					<thead>
 						<tr>
 							<th>Serial No.</th>
@@ -59,16 +76,30 @@
 							<th>Action</th>
 						</tr>
 					</thead>
-					<tbody>				
+					<tbody>
+					<?php 
+						$query = "select * from tbl_contact where status='1' order by id desc";
+						$contact = $db->select($query);
+						if ($contact) {
+							$i=0;
+							while ($result = $contact->fetch_assoc()) {
+								$i++;
+					?>
 						<tr class="even gradeC">
-							<td>01</td>
-							<td>Name</td>
-							<td>Email</td>
-							<td>Message</td>
-							<td>Date</td>
-							<td><a href="">Delete</a></td>
+					
+							<td><?php echo $i; ?></td>
+							<td><?php echo $result['firstname'].' '.$result['lastname']; ?></td>
+							<td><?php echo $result['email']; ?></td>
+							<td><?php echo  $fm->textShorten($result['body'],30); ?></td>
+							<td><?php echo $fm->formatDate($result['date']); ?></td>
+							<td>
+								<a onclick="return confirm('Are You sure to Delete !!')" href="?delid=<?php echo $result['id'] ?>">Delete</a>
+							
+							</td>
 						</tr>
+						<?php }}?>
 					</tbody>
+					
 				</table>
                </div>
             </div>
