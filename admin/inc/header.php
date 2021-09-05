@@ -84,7 +84,18 @@ Session::checkSession();
                 <li class="ic-dashboard"><a href="index.php"><span>Dashboard</span></a> </li>
                 <li class="ic-form-style"><a href=""><span>User Profile</span></a></li>
 				<li class="ic-typography"><a href="changepassword.php"><span>Change Password</span></a></li>
-				<li class="ic-grid-tables"><a href="inbox.php"><span>Inbox</span></a></li>
+				<li class="ic-grid-tables"><a href="inbox.php"><span>Inbox
+            <?php 
+            $query = "select * from tbl_contact where status='0' order by id desc";
+            $contact = $db->select($query);
+            if ($contact) {
+               $count = mysqli_num_rows($contact);
+               echo "(".$count.")";
+            }else {
+                echo "(0)";
+            }
+            ?>
+                </span></a></li>
                 <li class="ic-charts"><a href="postlist.php"><span>Visit Website</span></a></li>
             </ul>
         </div>

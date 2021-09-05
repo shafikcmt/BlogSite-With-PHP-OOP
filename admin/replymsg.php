@@ -33,9 +33,7 @@ if (!isset($_GET['replymsgid']) || $_GET['replymsgid'] == NULL) {
 						$query = "select * from tbl_contact where id='$id'";
 						$contact = $db->select($query);
 						if ($contact) {
-							$i=0;
 							while ($result = $contact->fetch_assoc()) {
-								$i++;
 					?>
                     <table class="form">
                        

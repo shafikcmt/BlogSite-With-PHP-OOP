@@ -66,12 +66,12 @@
 		<div class="maincontent clear">
 			<div class="about">
 				<h2>Contact us</h2>
-				<?php /*
+				<?php 
 				if (isset($error)) {
 					echo "<span style='color:red'>$error</span>";
 				}if (isset($msg)) {
 					echo "<span style='color:red'>$msg</span>";
-				}*/
+				}
 				?>
 			<form action="" method="post">
 				<table>

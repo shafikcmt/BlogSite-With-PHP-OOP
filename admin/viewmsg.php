@@ -23,9 +23,7 @@ if (!isset($_GET['viewmsgid']) || $_GET['viewmsgid'] == NULL) {
 						$query = "select * from tbl_contact where id='$id'";
 						$contact = $db->select($query);
 						if ($contact) {
-							$i=0;
-							while ($result = $contact->fetch_assoc()) {
-								$i++;
+							while ($result = $contact->fetch_assoc()) {	
 					?>
                     <table class="form">
                        
