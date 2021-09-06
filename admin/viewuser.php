@@ -1,8 +1,12 @@
 <?php include 'inc/header.php'; ?>
 <?php include 'inc/sidebar.php'; ?>
 <?php
-$userid     = Session::get('userId');
-$userrole   = Session::get('userRole');
+if (!isset($_GET['userid']) || $_GET['userid'] == NULL) {
+    echo "<script>window.location = 'userlist.php'; </script>";
+    //header("Location:catlist.php");
+}else {
+    $id = $_GET['userid'];
+}
 ?>
         <div class="grid_10">
 		
@@ -10,31 +14,13 @@ $userrole   = Session::get('userRole');
                 <h2>User Profile</h2>
             <?php 
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                $name       = mysqli_real_escape_string($db->link,$_POST['name']);
-                $username   = mysqli_real_escape_string($db->link,$_POST['username']);
-                $email      = mysqli_real_escape_string($db->link,$_POST['email']);
-                $detail     = mysqli_real_escape_string($db->link,$_POST['detail']);
-               
-            $query="UPDATE tbl_user
-                    SET
-                    name     = '$name',
-                    username = '$username',
-                    email    = '$email',
-                    detail   = '$detail'
-                    WHERE id = '$userid'";
-                    $updated_row = $db->update($query);
-                    if($updated_row){
-                        echo "<div class='success'> User Data Updated Successfully</div>";
-                    }
-                    else{
-                        echo "<div class='error'>User Data not Updated !</div>";
-                    }
+                echo "<script>window.location = 'userlist.php'; </script>";
                 }
 
             ?>
                 <div class="block">   
                     <?php 
-                    $query = "select * from tbl_user where id='$userid' AND role='$userrole'";
+                    $query = "select * from tbl_user where id='$id'";
                     $getuser = $db->select($query);
                     if ($getuser) {
                         while ($userresult = $getuser->fetch_assoc()) {
@@ -47,7 +33,7 @@ $userrole   = Session::get('userRole');
                                 <label>Name</label>
                             </td>
                             <td>
-                                <input type="text" name="name" value="<?php echo $userresult['name']; ?>" class="medium" />
+                                <input type="text" readonly value="<?php echo $userresult['name']; ?>" class="medium" />
                             </td>
                         </tr>
 
@@ -56,7 +42,7 @@ $userrole   = Session::get('userRole');
                                 <label>Username</label>
                             </td>
                             <td>
-                                <input type="text" name="username" value="<?php echo $userresult['username']; ?>" class="medium" />
+                                <input type="text" readonly value="<?php echo $userresult['username']; ?>" class="medium" />
                             </td>
                         </tr>
                         <tr>
@@ -64,7 +50,7 @@ $userrole   = Session::get('userRole');
                                 <label>Email</label>
                             </td>
                             <td>
-                                <input type="text" name="email" value="<?php echo $userresult['email']; ?>" class="medium" />
+                                <input type="text" readonly value="<?php echo $userresult['email']; ?>" class="medium" />
                             </td>
                         </tr>
                         <tr>
@@ -72,7 +58,7 @@ $userrole   = Session::get('userRole');
                                 <label>Details</label>
                             </td>
                             <td>
-                                <textarea name="detail" class="tinymce">
+                                <textarea readonly class="tinymce">
                                 <?php echo $userresult['detail']; ?>
                                 </textarea>
                             </td>
@@ -80,7 +66,7 @@ $userrole   = Session::get('userRole');
 						<tr>
                             <td></td>
                             <td>
-                                <input type="submit" name="submit" Value="Update" />
+                                <input type="submit" name="submit" Value="OK" />
                             </td>
                         </tr>
                     </table>
