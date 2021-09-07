@@ -1,5 +1,13 @@
+
 <?php include 'inc/header.php'; ?>
+<?php 
+if(!Session::get('userRole') == '0') { 
+    echo "<script>window.location = 'index.php'; </script>";
+    // echo header("Location:index.php");
+}
+?>
 <?php include 'inc/sidebar.php'; ?>
+
         <div class="grid_10">
 		
             <div class="box round first grid">
@@ -53,9 +61,9 @@
                             <td>
                                <select name="role" id="select">
                                    <option value="">Select User Role</option>
-                                   <option value="1">Admin</option>
-                                   <option value="2">Author</option>
-                                   <option value="3">Editor</option>
+                                   <option value="0">Admin</option>
+                                   <option value="1">Author</option>
+                                   <option value="2">Editor</option>
                                    
                                 </select>
                             </td>
