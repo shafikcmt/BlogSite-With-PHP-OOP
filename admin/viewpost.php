@@ -1,11 +1,11 @@
 <?php include 'inc/header.php'; ?>
 <?php include 'inc/sidebar.php'; ?>
 <?php
-if (!isset($_GET['editpostid']) || $_GET['editpostid'] == NULL) {
+if (!isset($_GET['viewpostid']) || $_GET['viewpostid'] == NULL) {
     echo "<script>window.location = 'postlist.php'; </script>";
     //header("Location:postlist.php");
 }else {
-    $postid = $_GET['editpostid'];
+    $postid = $_GET['viewpostid'];
 }
 ?>
    
@@ -15,73 +15,7 @@ if (!isset($_GET['editpostid']) || $_GET['editpostid'] == NULL) {
                 <h2>Update Post</h2>
             <?php 
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                $title = mysqli_real_escape_string($db->link,$_POST['title']);
-                $cat = mysqli_real_escape_string($db->link,$_POST['cat']);
-                $body = mysqli_real_escape_string($db->link,$_POST['body']);
-                $tags = mysqli_real_escape_string($db->link,$_POST['tags']);
-                $author = mysqli_real_escape_string($db->link,$_POST['author']);
-                $userid = mysqli_real_escape_string($db->link,$_POST['userid']);
-
-                $permited = array('jpg','jpeg','png','gif');
-                $file_name = $_FILES['image']['name'];
-                $file_size = $_FILES['image']['size'];
-                $file_temp = $_FILES['image']['tmp_name'];
-                $div = explode('.',$file_name);
-                $file_ext = strtolower(end($div));
-                $unique_image = substr(md5(time()),0,10).'.'.$file_ext;
-                $uploaded_image = "uploads/".$unique_image;
-                if ($title == "" ||$cat == "" ||$body == "" ||$tags == "" ||$author == "" ) {
-                    echo "<span class='error'>Field Must Not not be empty !</span>";
-                }else {
-                if (!empty($file_name)) {
-                   
-                    if($file_size>1048567){
-                        echo "<div class='success'>Image size should be less than 1kb.</div>";
-                    }
-                    elseif(in_array($file_ext,$permited) === false){
-                        echo "<div class='success'>You can upload only:-".implode(', ',$permited)."</div>";
-                    }
-                    else{
-                    move_uploaded_file($file_temp,$uploaded_image);
-                    $query="UPDATE tbl_post
-                    SET
-                    cat     = '$cat',
-                    title   = '$title',
-                    body    = '$body',
-                    image   = '$uploaded_image',
-                    author  = '$author',
-                    tags    = '$tags',
-                    userid  = '$userid'
-                    WHERE id = '$postid'";
-                    $updated_row = $db->update($query);
-                    if($updated_row){
-                        echo "<div class='success'>Data Updated Successfully</div>";
-                    }
-                    else{
-                        echo "<div class='error'>Data not Updated !</div>";
-                    }
-                }
-            
-
-        }else {
-            $query="UPDATE tbl_post
-                    SET
-                    cat     = '$cat',
-                    title   = '$title',
-                    body    = '$body',
-                    author  = '$author',
-                    tags    = '$tags',
-                    userid  = '$userid'
-                    WHERE id = '$postid'";
-                    $updated_row = $db->update($query);
-                    if($updated_row){
-                        echo "<div class='success'>Data Updated Successfully</div>";
-                    }
-                    else{
-                        echo "<div class='error'>Data not Updated !</div>";
-                    }
-            }
-        }
+                echo "<script>window.location = 'postlist.php'; </script>";
             }
             ?>
                 <div class="block">   
@@ -99,7 +33,7 @@ if (!isset($_GET['editpostid']) || $_GET['editpostid'] == NULL) {
                                 <label>Title</label>
                             </td>
                             <td>
-                                <input type="text" name="title" value="<?php echo $postresult['title']; ?>" class="medium" />
+                                <input type="text" readonly value="<?php echo $postresult['title']; ?>" class="medium" />
                             </td>
                         </tr>
                      
@@ -131,11 +65,11 @@ if (!isset($_GET['editpostid']) || $_GET['editpostid'] == NULL) {
                       
                         <tr>
                             <td>
-                                <label>Upload Image</label>
+                                <label>Image</label>
                             </td>
                             <td>
-                                <img src=" <?php echo $postresult['image']; ?>" height="80px" width="200px" alt=""><br/>
-                                <input type="file" name="image" />
+                                <img src=" <?php echo $postresult['image']; ?>" height="100px" width="250px" alt=""><br/>
+                                
                             </td>
                         </tr>
                         <tr>
@@ -162,13 +96,12 @@ if (!isset($_GET['editpostid']) || $_GET['editpostid'] == NULL) {
                             </td>
                             <td>
                                 <input type="text" value="<?php echo $postresult['author']; ?>" name="author" class="medium" />
-                                <input type="hidden" name="userid" value="<?php echo Session::get('userId') ?>" class="medium" />
                             </td>
                         </tr>
 						<tr>
                             <td></td>
                             <td>
-                                <input type="submit" name="submit" Value="Save" />
+                                <input type="submit" name="submit" Value="Ok" />
                             </td>
                         </tr>
                     </table>
