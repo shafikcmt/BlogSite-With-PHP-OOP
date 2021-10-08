@@ -86,7 +86,7 @@ if (!isset($_GET['editpostid']) || $_GET['editpostid'] == NULL) {
             ?>
                 <div class="block">   
                     <?php 
-                    $query = "select * from tbl_post where id='$postid' order by id desc";
+                    $query = "select * from tbl_post where id='$postid'";
                     $getpost = $db->select($query);
                     if ($getpost) {
                         while ($postresult = $getpost->fetch_assoc()) {
